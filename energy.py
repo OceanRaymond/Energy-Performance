@@ -10,7 +10,7 @@ def get_input(local=False):
     if local:
         print("Reading local file")
 
-        return "data.csv"
+        return "data11.csv"
 
     dids = os.getenv("DIDS", None)
 
@@ -40,8 +40,8 @@ def run_gpr(local=False):
     print("Stacking data.")
 
     X = data.drop(['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34'], axis=1)
-
-
+    X = X.to_numpy()
+    
     depth = 10
     
     print("Building ML models")
@@ -256,7 +256,7 @@ def run_gpr(local=False):
     model_34.score(X_test, y_34_test)  
 
     print("Evaluating ML models")
-    print("Here are the accuarcy of each model :")
+    print("Here are the accuracy of each model :")
 
     print("Add additional 80 mm jacket to hot water cylinder :",model_0.score(X_test, y_0_test))
     print("Cavity wall insulation :",model_1.score(X_test, y_0_test))
@@ -419,5 +419,7 @@ def run_gpr(local=False):
 
 
 if __name__ == '__main__':
-    local = len(sys.argv) == 2 and sys.argv[1] == "local"
+    local = True
     run_gpr(local)
+
+

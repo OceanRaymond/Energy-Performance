@@ -10,7 +10,7 @@ def get_input(local=False):
     if local:
         print("Reading local file")
 
-        return "data11.csv"
+        return "data12.csv"
 
     dids = os.getenv("DIDS", None)
 
@@ -256,9 +256,47 @@ def run_gpr(local=False):
     model_34.fit(X_train, y_34_train) 
     model_34.score(X_test, y_34_test)  
 
-  
+    print("Evaluating ML models")
+    print("Here are the accuarcy of each model :")
+
+    print("Add additional 80 mm jacket to hot water cylinder :",model_0.score(X_test, y_0_test))
+    print("Cavity wall insulation :",model_1.score(X_test, y_0_test))
+    print("Change heating to gas condensing boiler :",model_2.score(X_test, y_0_test))
+    print("Change room heaters to condensing boiler :",model_3.score(X_test, y_0_test))
+    print("Condensing boiler :",model_4.score(X_test, y_0_test))
+    print("Condensing oil boiler with radiators :",model_5.score(X_test, y_0_test))
+    print("Draughtproofing :",model_6.score(X_test, y_0_test))
+    print("Flat roof insulation :",model_7.score(X_test, y_0_test))
+    print("Floor insulation (solid floor) :",model_8.score(X_test, y_0_test))
+    print("Floor insulation (suspended floor) :",model_9.score(X_test, y_0_test))
+    print("Flue gas heat recovery device in conjunction with boiler :",model_10.score(X_test, y_0_test))
+    print("Heat recovery system for mixer showers :",model_11.score(X_test, y_0_test))
+    print("High heat retention storage heaters :",model_12.score(X_test, y_0_test))
+    print("High heat retention storage heaters and dual immersion cylinder :",model_13.score(X_test, y_0_test))
+    print("High performance external doors :",model_14.score(X_test, y_0_test))
+    print("Hot water cylinder thermostat :",model_15.score(X_test, y_0_test))
+    print("Increase hot water cylinder insulation :",model_16.score(X_test, y_0_test))
+    print("Increase loft insulation to 270 mm :",model_17.score(X_test, y_0_test))
+    print("Insulate hot water cylinder with 80 mm jacket :",model_18.score(X_test, y_0_test))
+    print("Internal or external wall insulation :",model_19.score(X_test, y_0_test))
+    print("Low energy lighting for all fixed outlets :",model_20.score(X_test, y_0_test))
+    print("Replace boiler with biomass boiler :",model_21.score(X_test, y_0_test))
+    print("Replace boiler with new condensing boiler :",model_22.score(X_test, y_0_test))
+    print("Replace heating unit with condensing unit :",model_23.score(X_test, y_0_test))
+    print("Replace single glazed windows with low-E double glazed windows :",model_24.score(X_test, y_0_test))
+    print("Replacement glazing units :",model_25.score(X_test, y_0_test))
+    print("Replacement warm air unit :",model_26.score(X_test, y_0_test))
+    print("Room-in-roof insulation :",model_27.score(X_test, y_0_test))
+    print("Secondary glazing to single glazed windows :",model_28.score(X_test, y_0_test))
+    print("Solar photovoltaic panels, 2.5 kWp :",model_29.score(X_test, y_0_test))
+    print("Solar water heating :",model_30.score(X_test, y_0_test))
+    print("Time and temperature zone control :",model_31.score(X_test, y_0_test))
+    print("Upgrade heating controls :",model_32.score(X_test, y_0_test))
+    print("Wind turbine :",model_33.score(X_test, y_0_test))
+    print("Wood pellet stove with boiler and radiators :",model_34.score(X_test, y_0_test))
+    print("")
    
-    print("Recommended Improvemnets")
+    print("Forecast")
 
     #Need a second dataset here with the user's inputs
     #Let's use this array as an example :
@@ -268,10 +306,7 @@ def run_gpr(local=False):
     #print(N)
 
     print("")
-    print("Here are the improvements the model advises you to make: ")
-    print(" - [0] means you don't need to make any changes")
-    print(" - [1] means you should make the recommended change")
-    print(" - Probability that the recommendation is correct is specified below each item")
+    print("Here are the improvements the model advises you to make : ")
     print("")
     print("Add additional 80 mm jacket to hot water cylinder", model_0.predict(N))
     print("Probability that the model is correct :", model_0.predict_proba(N).max()*100,"%")

@@ -1,0 +1,87 @@
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+import pprint
+import pandas as pd
+import numpy as np
+from IPython.display import *
+import ipywidgets as widgets    
+from ipywidgets import *
+
+#Authorize the API
+scope = [
+    'https://www.googleapis.com/auth/drive',
+    'https://www.googleapis.com/auth/drive.file'
+    ]
+file_name = 'client_key.json'
+creds = ServiceAccountCredentials.from_json_keyfile_name(file_name,scope)
+client = gspread.authorize(creds)
+
+#Import CSV to fill the dropdown lists
+property_type = pd.read_csv('property_type.csv', sep=',', header=0, nrows=10)
+floor_area = pd.read_csv('floor_area.csv', sep=',', header=0, nrows=10)
+construction_age = pd.read_csv('construction_age.csv', sep=',', header=0, nrows=10)
+wall_description = pd.read_csv('wall_description.csv', sep=',', header=0, nrows=10)    
+roof_description = pd.read_csv('roof_description.csv', sep=',', header=0, nrows=10)    
+floor_description = pd.read_csv('floor_description.csv', sep=',', header=0, nrows=10)
+windows_description = pd.read_csv('windows_description.csv', sep=',', header=0, nrows=10)
+mainheat_description = pd.read_csv('mainheat_description.csv', sep=',', header=0, nrows=10)
+lighting_description = pd.read_csv('lighting_description.csv', sep=',', header=0, nrows=10)
+hotwater_description = pd.read_csv('hotwater_description.csv', sep=',', header=0, nrows=10)
+
+X = pd.concat([property_type, construction_age, wall_description, roof_description, floor_description, windows_description, mainheat_description, lighting_description, hotwater_description],axis=1)
+
+X2 = X.astype(np.int8)  
+X = X.astype(np.int8).to_numpy() 
+
+#Create and fill dropdown lists
+a_widget = Dropdown(options = list(property_type.keys()))
+b_widget = Dropdown(options = list(construction_age.keys()))
+c_widget = Dropdown(options = list(wall_description.keys()))
+d_widget = Dropdown(options = list(roof_description.keys()))
+e_widget = Dropdown(options = list(floor_description.keys()))
+f_widget = Dropdown(options = list(windows_description.keys()))
+g_widget = Dropdown(options = list(mainheat_description.keys()))
+h_widget = Dropdown(options = list(lighting_description.keys()))
+i_widget = Dropdown(options = list(hotwater_description.keys()))
+
+test_2 = list(X2.keys())     
+
+pb = widgets.Button(
+    description='Click me',
+    disabled=False,
+    button_style='', # 'success', 'info', 'warning', 'danger' or ''
+    tooltip='Click me',
+)    
+
+#Create and send the inputs
+def on_button_clicked(b):
+    N = np.zeros((1, 3168)).astype(np.uint8)
+    N[0,test_2.index(a_widget.value)] = 1
+    N[0,test_2.index(b_widget.value)] = 1
+    N[0,test_2.index(c_widget.value)] = 1
+    N[0,test_2.index(d_widget.value)] = 1
+    N[0,test_2.index(e_widget.value)] = 1
+    N[0,test_2.index(f_widget.value)] = 1
+    N[0,test_2.index(g_widget.value)] = 1
+    N[0,test_2.index(h_widget.value)] = 1
+    N[0,test_2.index(i_widget.value)] = 1
+    
+    N2 = N.tolist()
+        
+    #Fetch the sheet
+    spreadsheet = client.open('dataset2')
+    sheet = spreadsheet.sheet1
+    pp = pprint.PrettyPrinter()
+
+    #Update Row
+    rng = "data11!A2:DQV2"
+    spreadsheet.values_update(rng, params={'valueInputOption': 'USER_ENTERED'}, body={'values': N2})
+    
+    print("dataset updated")
+            
+
+pb.on_click(on_button_clicked)
+
+ui = widgets.VBox([widgets.HBox([a_widget]), widgets.HBox([b_widget]), widgets.HBox([c_widget]), widgets.HBox([d_widget]), widgets.HBox([e_widget]), widgets.HBox([f_widget]), widgets.HBox([g_widget]), widgets.HBox([h_widget]), widgets.HBox([i_widget]),pb])
+
+display(ui)
